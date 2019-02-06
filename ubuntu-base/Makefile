@@ -1,7 +1,7 @@
-VERSION=18.10
+VERSION?=18.10
 REVISION?=$(shell date --rfc-3339=date)
 TAG=${VERSION}-${REVISION}
-REGISTRY=luxas
+REGISTRY?=luxas
 KERNEL_EXTRA?=
 KERNEL_BUILDER_IMAGE=luxas/kernel-builder:gcc-7
 UID_GID=$(shell id -u):$(shell id -g)
