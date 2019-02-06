@@ -10,12 +10,12 @@ install:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 script:
-- make build
+- make -C $IMAGE build
 
 deploy:
 - provider: script
-  script: make push-latest
+  script: make -C $IMAGE push-latest
 - provider: script
-  script: make push-tag REVISION=$TRAVIS_TAG
+  script: make -C $IMAGE push-tag REVISION=$TRAVIS_TAG
   on:
     tags: true
