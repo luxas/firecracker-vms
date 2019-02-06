@@ -2,6 +2,10 @@ language: minimal
 services:
 - docker
 
+cache:
+  directories:
+  - ubuntu-base/build
+
 env:
 - IMAGE=ubuntu-base VERSION=18.10
 - IMAGE=ubuntu-base VERSION=18.04
