@@ -53,7 +53,7 @@ build: rootfs kernel
 		--build-arg MIRROR_PREFIX=${MIRROR_PREFIX} \
 		-t ${REGISTRY}/ubuntu-base:${TAG} .
 
-push-latest: build
+push-latest:
 	docker tag ${REGISTRY}/ubuntu-base:${TAG} ${REGISTRY}/ubuntu-base:${VERSION}
 	docker push ${REGISTRY}/ubuntu-base:${VERSION}
 ifeq ($(VERSION),18.10)
@@ -61,7 +61,7 @@ ifeq ($(VERSION),18.10)
 	docker push ${REGISTRY}/ubuntu-base:latest
 endif
 
-push-tagged: build
+push-tagged:
 	docker push ${REGISTRY}/ubuntu-base:${TAG}
 
 clean:
