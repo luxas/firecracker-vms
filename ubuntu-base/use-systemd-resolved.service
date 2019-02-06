@@ -1,0 +1,12 @@
+# Enable resolving using systemd-resolved, this way we can input DNS servers
+# via systemd-networkd in the .network configuration files. This service is there
+# in order to override /etc/resolv.conf in case it's strangely configured.
+[Unit]
+Description=Make systemd-resolved manage /etc/resolv.conf
+
+[Service]
+Type=oneshot
+ExecStart=/bin/ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+
+[Install]
+WantedBy=multi-user.target

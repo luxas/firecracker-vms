@@ -8,17 +8,19 @@ ARG MIRROR_PREFIX="fi."
 ADD build/rootfs-${UBUNTU_VERSION}.tar.gz /
 ADD build/kernel-${KERNEL_VERSION}${KERNEL_EXTRA}.tar.gz /
 
-# Set the root password and the default dns server
-ARG DNS_SERVER="1.1.1.1"
-RUN echo 'root:root' | chpasswd && \
-    echo "nameserver ${DNS_SERVER}" > /etc/resolv.conf
 
-# This is the same as "systemctl enable systemd-networkd"
+# Set the root password to root
+RUN echo 'root:root' | chpasswd
+
+# This is the same as "systemctl enable systemd-networkd && systemctl enable use-systemd-resolved"
+# use-systemd-resolved.service is here to force /etc/resolv.conf being a symlink to the systemd-resolved-managed file at runtime
+COPY use-systemd-resolved.service /etc/systemd/system/
 RUN mkdir -p /etc/systemd/system/sockets.target.wants /etc/systemd/system/network-online.target.wants && \
     ln -sf /lib/systemd/system/systemd-networkd.service /etc/systemd/system/dbus-org.freedesktop.network1.service && \
     ln -sf /lib/systemd/system/systemd-networkd.service /etc/systemd/system/multi-user.target.wants/systemd-networkd.service && \
     ln -sf /lib/systemd/system/systemd-networkd.socket /etc/systemd/system/sockets.target.wants/systemd-networkd.socket && \
-    ln -sf /lib/systemd/system/systemd-networkd-wait-online.service /etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online.service
+    ln -sf /lib/systemd/system/systemd-networkd-wait-online.service /etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online.service && \
+    ln -sf /etc/systemd/system/use-systemd-resolved.service /etc/systemd/system/multi-user.target.wants/use-systemd-resolved.service
 
 # Add the sources.list file so that we can customize from where to get packages
 COPY sources.list /etc/apt/
