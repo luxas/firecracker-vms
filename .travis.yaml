@@ -1,0 +1,21 @@
+language: minimal
+services:
+- docker
+
+env:
+- IMAGE=ubuntu-base VERSION=18.10
+- IMAGE=ubuntu-base VERSION=18.04
+
+install:
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+script:
+- make build
+
+deploy:
+- provider: script
+  script: make push-latest
+- provider: script
+  script: make push-tag REVISION=$TRAVIS_TAG
+  on:
+    tags: true

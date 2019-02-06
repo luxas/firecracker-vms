@@ -17,7 +17,7 @@ KERNEL_VERSION=4.19.19
 KERNEL_BUILDER_TAG=gcc-7
 endif
 
-all: build-image
+all: build
 rootfs-$(VERSION).tar:
 	# Ideally, this could be done in the multi-stage Dockerfile. However, there is no support for privileged builds, and
 	# debootstrap does a chroot syscall which requires root privileges :/
@@ -30,7 +30,7 @@ rootfs-$(VERSION).tar:
 		cd /mnt && tar -zcf /out/rootfs-${VERSION}.tar.gz . && \
 		chown ${UID_GID} /out/rootfs-${VERSION}.tar.gz"
 
-build-image: rootfs-$(VERSION).tar
+build: rootfs-$(VERSION).tar
 	# Build the kernel and the rest of the VM base OS image
 	sed -e "s|KERNEL_BUILDER_IMAGE|${KERNEL_BUILDER_IMAGE}:${KERNEL_BUILDER_TAG}|g" Dockerfile | \
 		docker build \
