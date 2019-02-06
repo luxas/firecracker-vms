@@ -33,7 +33,6 @@ build/kernel-$(KERNEL_VERSION)$(KERNEL_EXTRA).tar.gz:
 		-v $(shell pwd)/build:/build \
 		-v $(shell pwd)/Kconfig-${KERNEL_VERSION}:/tmp/.config \
 		${KERNEL_BUILDER_IMAGE} /bin/bash -c "\
-			update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 10 && \
 			git fetch --tags && git checkout v${KERNEL_VERSION} && \
 			make clean && make mrproper && cp /tmp/.config . && \
 			make EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= oldconfig && \
