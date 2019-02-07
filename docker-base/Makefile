@@ -7,7 +7,7 @@ UID_GID=$(shell id -u):$(shell id -g)
 all: build
 build:
 	sed -e "s|UBUNTU_VERSION|${VERSION}|g" Dockerfile | \
-		docker build -t ${REGISTRY}/docker-base:${TAG} .
+		docker build -t ${REGISTRY}/docker-base:${TAG} -f - .
 
 push-latest:
 	docker tag ${REGISTRY}/docker-base:${TAG} ${REGISTRY}/docker-base:${VERSION}
