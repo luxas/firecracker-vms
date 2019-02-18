@@ -1,7 +1,7 @@
-VERSION=18.10
+VERSION?=18.10
 REVISION?=$(shell date --rfc-3339=date)
 TAG=${VERSION}-${REVISION}
-REGISTRY=luxas
+REGISTRY?=luxas
 KERNEL_EXTRA?=
 KERNEL_BUILDER_IMAGE=luxas/kernel-builder:gcc-7
 UID_GID=$(shell id -u):$(shell id -g)
@@ -9,7 +9,7 @@ MIRROR_PREFIX?=fi.
 
 # Supported base image versions
 ifeq ($(VERSION),18.04)
-KERNEL_VERSION=4.14.55
+KERNEL_VERSION=4.14.97
 endif
 ifeq ($(VERSION),18.10)
 KERNEL_VERSION=4.19.19
@@ -33,7 +33,6 @@ build/kernel-$(KERNEL_VERSION)$(KERNEL_EXTRA).tar.gz:
 		-v $(shell pwd)/build:/build \
 		-v $(shell pwd)/Kconfig-${KERNEL_VERSION}:/tmp/.config \
 		${KERNEL_BUILDER_IMAGE} /bin/bash -c "\
-			update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 10 && \
 			git fetch --tags && git checkout v${KERNEL_VERSION} && \
 			make clean && make mrproper && cp /tmp/.config . && \
 			make EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= oldconfig && \
@@ -54,7 +53,7 @@ build: rootfs kernel
 		--build-arg MIRROR_PREFIX=${MIRROR_PREFIX} \
 		-t ${REGISTRY}/ubuntu-base:${TAG} .
 
-push-latest: build
+push-latest:
 	docker tag ${REGISTRY}/ubuntu-base:${TAG} ${REGISTRY}/ubuntu-base:${VERSION}
 	docker push ${REGISTRY}/ubuntu-base:${VERSION}
 ifeq ($(VERSION),18.10)
@@ -62,7 +61,7 @@ ifeq ($(VERSION),18.10)
 	docker push ${REGISTRY}/ubuntu-base:latest
 endif
 
-push-tagged: build
+push-tagged:
 	docker push ${REGISTRY}/ubuntu-base:${TAG}
 
 clean:
