@@ -1,0 +1,12 @@
+[Unit]
+Description=Prometheus Node Exporter
+
+[Service]
+ExecStart=/usr/bin/node_exporter \
+   --web.listen-address=0.0.0.0:9100 \
+   --collector.systemd \
+   --collector.mountstats \
+   --collector.ksmd
+
+[Install]
+WantedBy=multi-user.target.wants
