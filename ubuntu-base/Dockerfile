@@ -43,7 +43,7 @@ RUN apt-get update && \
 COPY .bash_profile /root/
 
 # Add the systemd-networkd config file for enabling DHCP on eth0
-COPY 20-dhcp.network /etc/systemd/networkd/
+COPY 20-dhcp.network /etc/systemd/network/
 
 # Enable the node exporter by default listening on 0.0.0.0:9100
 # If you don't want this service to automatically start, you can opt out with
