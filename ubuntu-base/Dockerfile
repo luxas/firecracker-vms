@@ -8,7 +8,6 @@ ARG MIRROR_PREFIX="fi."
 ADD build/rootfs-${UBUNTU_VERSION}.tar.gz /
 ADD build/kernel-${KERNEL_VERSION}${KERNEL_EXTRA}.tar.gz /
 
-
 # Set the root password to root
 RUN echo 'root:root' | chpasswd
 
@@ -42,6 +41,9 @@ RUN apt-get update && \
 # The handler in this .bash_profile rescans the terminal size after each
 # command, so tools like less and htop are actually usable in the VM
 COPY .bash_profile /root/
+
+# Add the systemd-networkd config file for enabling DHCP on eth0
+COPY 20-dhcp.network /etc/systemd/networkd/
 
 # Enable the node exporter by default listening on 0.0.0.0:9100
 # If you don't want this service to automatically start, you can opt out with
