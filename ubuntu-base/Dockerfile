@@ -26,13 +26,15 @@ RUN mkdir -p /etc/systemd/system/sockets.target.wants /etc/systemd/system/networ
 COPY sources.list /etc/apt/
 RUN sed -e "s|UBUNTU_CODENAME|$(grep UBUNTU_CODENAME /etc/os-release | cut -d= -f2)|g;s|MIRROR_PREFIX|${MIRROR_PREFIX}|g" -i /etc/apt/sources.list
 # Install some utilities, which are needed in most installations
+# PolicyKit is required for systemd-networkd to set the transient hostname
 RUN apt-get update && \
     apt-get -y install --no-install-recommends \
+      policykit-1 \
       bash-completion \
       command-not-found \
       openssh-server \
       rng-tools \
-      nano \
+      vim \
       curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
