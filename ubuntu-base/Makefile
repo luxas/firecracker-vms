@@ -9,10 +9,10 @@ MIRROR_PREFIX?=fi.
 
 # Supported base image versions
 ifeq ($(VERSION),18.04)
-KERNEL_VERSION=4.14.97
+KERNEL_VERSION=4.14.123
 endif
 ifeq ($(VERSION),18.10)
-KERNEL_VERSION=4.19.19
+KERNEL_VERSION=4.19.47
 endif
 
 all: build
