@@ -44,6 +44,16 @@ build/kernel-$(KERNEL_VERSION)$(KERNEL_EXTRA).tar.gz:
 			tar -czf /build/kernel-${KERNEL_VERSION}${KERNEL_EXTRA}.tar.gz /boot /lib/modules && \
 			chown ${UID_GID} /build/kernel-${KERNEL_VERSION}${KERNEL_EXTRA}.tar.gz"
 
+update-kconfig:
+	docker run -it \
+                -v $(shell pwd)/build:/build \
+                -v $(shell pwd)/Kconfig-${KERNEL_VERSION}:/tmp/.config \
+                ${KERNEL_BUILDER_IMAGE} /bin/bash -c "\
+			git fetch --tags && git checkout v${KERNEL_VERSION} && \
+			make clean && make mrproper && cp /tmp/.config . && \
+			make EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= olddefconfig && \
+			cp .config /tmp/.config"
+
 build: rootfs kernel
 	# Build the kernel and the rest of the VM base OS image
 	docker build \
