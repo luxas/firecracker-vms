@@ -38,6 +38,12 @@ RUN apt-get update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Generate a default locale to avoid errors when SSH'ing in
+RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
+	echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+	echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
+	locale-gen en_US.UTF-8
+
 # The handler in this .bash_profile rescans the terminal size after each
 # command, so tools like less and htop are actually usable in the VM
 COPY .bash_profile /root/
