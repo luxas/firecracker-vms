@@ -14,6 +14,9 @@ endif
 ifeq ($(VERSION),18.10)
 KERNEL_VERSION=4.19.47
 endif
+ifeq ($(VERSION),19.04)
+KERNEL_VERSION=5.1
+endif
 
 all: build
 rootfs: build/rootfs-$(VERSION).tar.gz

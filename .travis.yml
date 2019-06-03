@@ -9,6 +9,7 @@ cache:
 env:
 - IMAGE=ubuntu-base VERSION=18.10
 - IMAGE=ubuntu-base VERSION=18.04
+- IMAGE=ubuntu-base VERSION=19.04
 - IMAGE=docker-base VERSION=18.10
 - IMAGE=docker-base VERSION=18.04
 
