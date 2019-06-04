@@ -40,6 +40,7 @@ build/kernel-$(KERNEL_VERSION)$(KERNEL_EXTRA).tar.gz:
 			git fetch --tags && git checkout v${KERNEL_VERSION} && \
 			make clean && make mrproper && cp /tmp/.config . && \
 			make EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= oldconfig && \
+			make EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= olddefconfig && \
 			make EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= -j16 && \
 			make EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= modules_install && \
 			cp vmlinux /boot/vmlinux-${KERNEL_VERSION}${KERNEL_EXTRA} && \
