@@ -13,7 +13,7 @@ RUN echo 'root:root' | chpasswd
 
 # Symlink the kernel config to the place where consumers expect it
 RUN ln -s /boot/Kconfig-${KERNEL_VERSION}${KERNEL_EXTRA} /boot/config-${KERNEL_VERSION}${KERNEL_EXTRA} && \
-  ln -s /boot/Kconfig-${KERNEL_VERSION}${KERNEL_EXTRA} /usr/lib/modules/${KERNEL_VERSION}${KERNEL_EXTRA}/config
+  mkdir -p /usr/src/linux/ && ln -s /boot/Kconfig-${KERNEL_VERSION}${KERNEL_EXTRA} /usr/src/linux/.config
 
 # This is the same as "systemctl enable systemd-networkd && systemctl enable use-systemd-resolved"
 # use-systemd-resolved.service is here to force /etc/resolv.conf being a symlink to the systemd-resolved-managed file at runtime
