@@ -1,4 +1,4 @@
-VERSION?=18.10
+VERSION?=18.04
 REVISION?=$(shell date --rfc-3339=date)
 TAG=${VERSION}-${REVISION}
 REGISTRY?=luxas
@@ -9,7 +9,8 @@ MIRROR_PREFIX?=fi.
 
 # Supported base image versions
 ifeq ($(VERSION),18.04)
-KERNEL_VERSION=4.14.123
+KERNEL_VERSION=4.15
+KERNEL_EXTRA=.0-50
 endif
 ifeq ($(VERSION),18.10)
 KERNEL_VERSION=4.19.47
