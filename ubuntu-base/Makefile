@@ -10,7 +10,7 @@ MIRROR_PREFIX?=fi.
 # Supported base image versions
 ifeq ($(VERSION),18.04)
 KERNEL_VERSION=4.15
-KERNEL_EXTRA=.0-50
+KERNEL_EXTRA=-50
 endif
 ifeq ($(VERSION),18.10)
 KERNEL_VERSION=4.19.47
@@ -33,7 +33,7 @@ build/rootfs-$(VERSION).tar.gz:
 kernel: build/kernel-$(KERNEL_VERSION)$(KERNEL_EXTRA).tar.gz
 build/kernel-$(KERNEL_VERSION)$(KERNEL_EXTRA).tar.gz:
 	# Compile the kernel from the specified config, and generate a tarball with the artifacts
-	docker run -it --rm \
+	docker run -it \
 		-v $(shell pwd)/build:/build \
 		-v $(shell pwd)/Kconfig-${KERNEL_VERSION}:/tmp/.config \
 		${KERNEL_BUILDER_IMAGE} /bin/bash -c "\
@@ -71,7 +71,7 @@ build: rootfs kernel
 push-latest:
 	docker tag ${REGISTRY}/ubuntu-base:${TAG} ${REGISTRY}/ubuntu-base:${VERSION}
 	docker push ${REGISTRY}/ubuntu-base:${VERSION}
-ifeq ($(VERSION),18.10)
+ifeq ($(VERSION),18.04)
 	docker tag ${REGISTRY}/ubuntu-base:${TAG} ${REGISTRY}/ubuntu-base:latest
 	docker push ${REGISTRY}/ubuntu-base:latest
 endif
