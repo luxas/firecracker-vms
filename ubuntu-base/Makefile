@@ -41,13 +41,19 @@ build/kernel-$(KERNEL_VERSION)$(KERNEL_EXTRA).tar.gz:
 			make clean && make mrproper && cp /tmp/.config . && \
 			make EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= olddefconfig && \
 			make EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= oldconfig && \
-			make EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= -j16 && \
+			make EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= -j32 && \
 			make EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= modules_install && \
 			cp vmlinux /boot/vmlinux-${KERNEL_VERSION}${KERNEL_EXTRA} && \
 			ln -s /boot/vmlinux-${KERNEL_VERSION}${KERNEL_EXTRA} /boot/vmlinux && \
 			cp .config /boot/Kconfig-${KERNEL_VERSION}${KERNEL_EXTRA} && \
 			tar -czf /build/kernel-${KERNEL_VERSION}${KERNEL_EXTRA}.tar.gz /boot /lib/modules && \
 			chown ${UID_GID} /build/kernel-${KERNEL_VERSION}${KERNEL_EXTRA}.tar.gz"
+
+kshell:
+	docker run -it \
+		-v $(shell pwd)/build:/build \
+		-v $(shell pwd)/Kconfig-${KERNEL_VERSION}:/tmp/.config \
+		${KERNEL_BUILDER_IMAGE} /bin/bash
 
 update-kconfig:
 	docker run -it \
